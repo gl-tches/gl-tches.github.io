@@ -1,0 +1,124 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('posts', ({ data }) => !data.draft);
+const posts = allPosts
+  .sort((a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime())
+  .slice(0, 5);
+
+const allProjects = await getCollection('projects');
+const projects = allProjects.slice(0, 4);
+---
+
+<Base title="Home">
+  <section class="hero">
+    <h1>GL*TCHES</h1>
+    <p class="subtitle">Notes on infrastructure, code, and the edges of things.</p>
+  </section>
+
+  <hr />
+
+  <section>
+    <div class="section-header">
+      <h2>RECENT POSTS</h2>
+      <a href="/blog" class="see-all">All posts →</a>
+    </div>
+
+    <div class="post-list">
+      {posts.map((post) => (
+        <div class="post-item">
+          <a href={`/blog/${post.id}`}>
+            <div class="card-label">{new Date(post.data.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}</div>
+            <div class="card-title">{post.data.title}</div>
+            <p class="card-excerpt">{post.data.description}</p>
+            {post.data.tags && (
+              <div class="tags">
+                {post.data.tags.map((tag: string) => (
+                  <span class="tag">{tag}</span>
+                ))}
+              </div>
+            )}
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <hr />
+
+  <section>
+    <div class="section-header">
+      <h2>PROJECTS</h2>
+      <a href="/projects" class="see-all">All projects →</a>
+    </div>
+
+    <div class="card-grid card-grid--2col">
+      {projects.map((project) => (
+        <div class="card">
+          <a href={project.data.url || project.data.repo || '/projects'}>
+            <div class="card-label">{project.data.status}</div>
+            <div class="card-title">{project.data.title}</div>
+            <p class="card-excerpt">{project.data.description}</p>
+          </a>
+        </div>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding: 4rem 0 2rem;
+  }
+
+  .hero h1 {
+    font-family: var(--font-mono);
+    font-size: 3.5rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.5rem;
+  }
+
+  .hero .subtitle {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-style: italic;
+    color: var(--fg-muted);
+    margin-bottom: 0;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-header h2 {
+    margin-bottom: 0;
+  }
+
+  .see-all {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    color: var(--fg-muted);
+    text-decoration: none;
+  }
+
+  .see-all:hover {
+    color: var(--fg);
+    opacity: 1;
+  }
+
+  section {
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+  }
+</style>

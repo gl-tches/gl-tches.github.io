@@ -1,0 +1,107 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+  currentPage?: string;
+}
+
+const { title, description = "GL*TCHES — a blog by a0v", currentPage = "" } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title} — GL*TCHES</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+  </head>
+  <body>
+    <nav>
+      <div class="container">
+        <a href="/" class="nav-brand">GL*TCHES</a>
+
+        <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18M3 6h18M3 18h18" />
+          </svg>
+        </button>
+
+        <ul class="nav-links">
+          <li><a href="/blog" aria-current={currentPage === "blog" ? "page" : undefined}>Blog</a></li>
+          <li><a href="/projects" aria-current={currentPage === "projects" ? "page" : undefined}>Projects</a></li>
+          <li><a href="/about" aria-current={currentPage === "about" ? "page" : undefined}>About</a></li>
+          <li><a href="/links" aria-current={currentPage === "links" ? "page" : undefined}>Links</a></li>
+          <li>
+            <button class="theme-toggle" aria-label="Toggle theme">
+              <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="5" /><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
+              </svg>
+              <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+
+    <footer>
+      <div class="container">
+        <span class="footer-left">© {new Date().getFullYear()} GL*TCHES</span>
+        <ul class="footer-links">
+          <li><a href="https://github.com/gl-tches" target="_blank" rel="noopener">GitHub</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+      </div>
+    </footer>
+
+    <style is:global>
+      @import '../styles/global.css';
+    </style>
+
+    <script is:inline>
+      // Theme toggle
+      (function() {
+        const stored = localStorage.getItem('theme');
+        if (stored) {
+          document.documentElement.setAttribute('data-theme', stored);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          // Theme toggle
+          const toggle = document.querySelector('.theme-toggle');
+          if (toggle) {
+            toggle.addEventListener('click', () => {
+              const current = document.documentElement.getAttribute('data-theme');
+              const isDark = current === 'dark' ||
+                (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+              const next = isDark ? 'light' : 'dark';
+              document.documentElement.setAttribute('data-theme', next);
+              localStorage.setItem('theme', next);
+            });
+          }
+
+          // Mobile nav toggle
+          const navToggle = document.querySelector('.nav-toggle');
+          const navLinks = document.querySelector('.nav-links');
+          if (navToggle && navLinks) {
+            navToggle.addEventListener('click', () => {
+              const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+              navToggle.setAttribute('aria-expanded', String(!expanded));
+              navLinks.classList.toggle('open');
+            });
+          }
+        });
+      })();
+    </script>
+  </body>
+</html>

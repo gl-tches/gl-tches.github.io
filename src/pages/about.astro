@@ -1,0 +1,54 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="About" currentPage="about">
+  <div class="page-header">
+    <h1>ABOUT</h1>
+  </div>
+
+  <div class="about-content">
+    <p>
+      I'm <strong>Vega</strong> — an independent developer working on infrastructure, ML research, 
+      and whatever catches my attention at 2am.
+    </p>
+
+    <p>
+      I operate a self-hosted cloud across a few VPS nodes, build with Rust and TypeScript, 
+      and use Claude Code as my primary development tool. Most of what I do lives at the 
+      intersection of systems programming and creative experimentation.
+    </p>
+
+    <p>
+      When I'm not writing code, I'm probably photographing something, working on math 
+      conjectures involving Fibonacci sequences and the golden ratio, or reading about 
+      quantum computing.
+    </p>
+
+    <hr />
+
+    <h2>COLOPHON</h2>
+
+    <p>
+      This site is built with <a href="https://astro.build" target="_blank" rel="noopener">Astro</a>, 
+      hosted on <a href="https://pages.github.com" target="_blank" rel="noopener">GitHub Pages</a>, 
+      and set in Instrument Serif, Source Serif 4, and JetBrains Mono.
+    </p>
+
+    <p>
+      The design takes cues from <a href="https://pi.dev" target="_blank" rel="noopener">pi.dev</a> 
+      (typography, whitespace) and <a href="https://opencode.ai" target="_blank" rel="noopener">opencode.ai</a> 
+      (card layout). Posts are written in Markdown and live in the repo.
+    </p>
+  </div>
+</Base>
+
+<style>
+  .about-content {
+    max-width: 640px;
+  }
+
+  .about-content p {
+    font-size: 1.05rem;
+  }
+</style>
